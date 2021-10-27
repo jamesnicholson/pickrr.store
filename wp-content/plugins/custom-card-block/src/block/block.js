@@ -82,6 +82,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 										<div className="title">{post.title.rendered}</div>
 										<div className="picture"><img src={picture} /></div>
 										<div className="description">{post.meta.short_description}</div>
+										<div className="date">{post.date.substring(0, 10)}</div>
 									</div>
 						}
 						return null;
@@ -93,7 +94,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 	},
 	save: ( props ) => {
 		const {posts, tags } = props.attributes;
-
+		
 		return (
 			<div className={ props.className }>
 				<div className="filters">
@@ -111,6 +112,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 										<div className="title">{post.title.rendered}</div>
 										<div className="picture"><img src={picture} /></div>
 										<div className="description">{post.meta.short_description}</div>
+										<div className="date">{post.date.substring(0, 10)}</div>
 									</div>
 						})
 					}
