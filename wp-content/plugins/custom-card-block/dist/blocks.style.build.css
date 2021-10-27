@@ -10,9 +10,58 @@
  * CSS for both Frontend+Backend.
  */
 .wp-block-cgb-block-custom-card-block {
-  background: orangered;
-  border: 0.2rem solid #292929;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  background: #832b0a1c;
+  border: 0.01rem solid #292929;
   color: #292929;
   margin: 0 auto;
-  max-width: 740px;
+  max-width: 740px !important;
   padding: 2rem; }
+
+.recipe-card-wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-align: center;
+      align-items: center; }
+
+.recipe-card {
+  width: 100%;
+  max-width: 315px;
+  margin: 10px;
+  background: white;
+  padding: 5px; }
+
+.recipe-card .title {
+  font-size: 16px;
+  font-weight: bold; }
+
+.recipe-card .description {
+  font-size: 13px;
+  line-height: 14px;
+  padding: 10px 0; }
+
+.filters {
+  display: -ms-flexbox;
+  display: flex; }
+
+.filter {
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 5px; }
+
+.filter:hover {
+  color: #ad8ebd; }
+
+@media only screen and (min-width: 768px) {
+  .recipe-card-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-align: start;
+        align-items: flex-start; } }

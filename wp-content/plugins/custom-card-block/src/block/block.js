@@ -38,48 +38,78 @@ registerBlockType( 'cgb/block-custom-card-block', {
 	attributes:{
 		posts: {
 			type: "Array"
+		},
+		tags:{
+			type: "Array"
 		}
 	},
 	edit: ( props ) => {
-		const {posts} = props.attributes;
-		console.log(posts)
+		const {posts, tags} = props.attributes;
 		posts === undefined && wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts => {
 			props.setAttributes({
 				posts: posts
 			})
 		});	
+
+		tags === undefined  && wp.apiFetch( { path: '/wp/v2/tags' } ).then( posts => {
+			props.setAttributes({
+				tags: posts
+			})
+		});
+		const handleFilter = () => {
+			console.log("rad")
+		}
 		return (
 			<div className={ props.className }>
-				<p>— Hello from the backend.</p>
+				<div className="filters">
+					{
+						tags && tags.map((tag) =>{
+							return <div key={tag.id} className="filter">{tag.name}</div>
+						})
+					}
+				</div>
+				<div className="recipe-card-wrapper">
 				{
 					posts && posts.map((post) =>{
 						var picture = post._embedded["wp:featuredmedia"][0].source_url
-						return 	<div>
-									<div>{post.title.rendered}</div>
-									<div><img src={picture} /></div>
-									<div>{post.meta.short_description}</div>
+						return 	<div className="recipe-card">
+									<div className="title">{post.title.rendered}</div>
+									<div className="picture"><img src={picture} /></div>
+									<div className="description">{post.meta.short_description}</div>
 								</div>
 					})
 				}
+				</div>
 			</div>
 		);
 	},
 	save: ( props ) => {
-		const {posts} = props.attributes;
-		console.log(posts)
+		const {posts, tags} = props.attributes;
+		function handleFilter() {
+			console.log("rad")
+		}
 		return (
 			<div className={ props.className }>
-				<p>— Hello from the frontend.</p>
-				{
-					posts && posts.map((post) =>{
-						var picture = post._embedded["wp:featuredmedia"][0].source_url
-						return 	<div>
-									<div>{post.title.rendered}</div>
-									<div><img src={picture} /></div>
-									<div>{post.meta.short_description}</div>
-								</div>
-					})
-				}
+				<div className="filters">
+					{
+						tags && tags.map((tag) =>{
+							return <div key={tag.id} className="filter">{tag.name}</div>
+						})
+					}
+				</div>
+				<div className="recipe-card-wrapper">
+					{
+						posts && posts.map((post) =>{
+							var picture = post._embedded["wp:featuredmedia"][0].source_url
+							return 	<div className="recipe-card">
+										<div className="title">{post.title.rendered}</div>
+										<div className="picture"><img src={picture} /></div>
+										<div className="description">{post.meta.short_description}</div>
+									</div>
+						})
+					}
+				</div>
+
 			</div>
 		);
 	}
