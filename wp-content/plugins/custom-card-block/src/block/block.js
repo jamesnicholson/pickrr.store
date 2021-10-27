@@ -41,10 +41,13 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		},
 		tags:{
 			type: "Array"
+		},
+		currentTag: {
+			type: "number"
 		}
 	},
 	edit: ( props ) => {
-		const {posts, tags} = props.attributes;
+		const {posts, tags, currentTag} = props.attributes;
 		posts === undefined && wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts => {
 			props.setAttributes({
 				posts: posts
@@ -56,27 +59,33 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				tags: posts
 			})
 		});
-		const handleFilter = () => {
-			console.log("rad")
+		function handleFilter(tag) {
+			props.setAttributes({
+				currentTag: tag
+			})
 		}
 		return (
 			<div className={ props.className }>
 				<div className="filters">
 					{
 						tags && tags.map((tag) =>{
-							return <div key={tag.id} className="filter">{tag.name}</div>
+							return <div key={tag.id} className="filter" onClick={() => handleFilter(tag.id)}>{tag.name}</div>
 						})
 					}
 				</div>
 				<div className="recipe-card-wrapper">
 				{
-					posts && posts.map((post) =>{
-						var picture = post._embedded["wp:featuredmedia"][0].source_url
-						return 	<div className="recipe-card">
-									<div className="title">{post.title.rendered}</div>
-									<div className="picture"><img src={picture} /></div>
-									<div className="description">{post.meta.short_description}</div>
-								</div>
+					posts && posts.map((post) => {
+						if(post.tags.indexOf(currentTag)){
+							console.log(post)
+							var picture = post._embedded["wp:featuredmedia"][0].source_url
+							return 	<div className="recipe-card">
+										<div className="title">{post.title.rendered}</div>
+										<div className="picture"><img src={picture} /></div>
+										<div className="description">{post.meta.short_description}</div>
+									</div>
+						}
+						return null;
 					})
 				}
 				</div>
@@ -84,28 +93,34 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		);
 	},
 	save: ( props ) => {
-		const {posts, tags} = props.attributes;
-		function handleFilter() {
-			console.log("rad")
+		const {posts, tags, currentTag} = props.attributes;
+		function handleFilter(tag) {
+			props.setAttributes({
+				currentTag: tag
+			})
 		}
 		return (
 			<div className={ props.className }>
 				<div className="filters">
 					{
-						tags && tags.map((tag) =>{
-							return <div key={tag.id} className="filter">{tag.name}</div>
+						tags && tags.map((tag) => {
+							return <div key={tag.id} className="filter" onClick={() => handleFilter(tag.id)}>{tag.name}</div>
 						})
 					}
 				</div>
 				<div className="recipe-card-wrapper">
 					{
-						posts && posts.map((post) =>{
-							var picture = post._embedded["wp:featuredmedia"][0].source_url
-							return 	<div className="recipe-card">
-										<div className="title">{post.title.rendered}</div>
-										<div className="picture"><img src={picture} /></div>
-										<div className="description">{post.meta.short_description}</div>
-									</div>
+						posts && posts.map((post) => {
+							if(post.tags.indexOf(currentTag)){
+								console.log(post)
+								var picture = post._embedded["wp:featuredmedia"][0].source_url
+								return 	<div className="recipe-card">
+											<div className="title">{post.title.rendered}</div>
+											<div className="picture"><img src={picture} /></div>
+											<div className="description">{post.meta.short_description}</div>
+										</div>
+							}
+							return null;
 						})
 					}
 				</div>
