@@ -47,8 +47,7 @@ function wpdocs_kantbtrue_init() {
       
     register_post_type( 'Recipe', $args );
 }
-add_action( 'init', 'wpdocs_kantbtrue_init' );
-add_action( 'rest_api_init', 'register_experience_meta_fields');
+
 function register_experience_meta_fields(){
 
     register_meta( 'post', 'short_description', array(
@@ -59,4 +58,16 @@ function register_experience_meta_fields(){
     ));
 
 }
+
+function wpse_add_front_end_clicker_script() {
+    wp_enqueue_script(
+        'clicker',
+        get_stylesheet_directory_uri() . '/clicker.js',
+        wp_get_theme()->get( 'Version' ),
+        true
+    );
+}
 wp_enqueue_script( 'wp-api' );
+add_action( 'init', 'wpdocs_kantbtrue_init' );
+add_action( 'rest_api_init', 'register_experience_meta_fields');
+add_action('init', 'wpse_add_front_end_clicker_script');

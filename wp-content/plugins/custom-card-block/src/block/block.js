@@ -69,7 +69,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				<div className="filters">
 					{
 						tags && tags.map((tag) =>{
-							return <div key={tag.id} className="filter" onClick={() => handleFilter(tag.id)}>{tag.name}</div>
+							return <div key={tag.id} className="filter" data-tag={tag.id} onClick={() => handleFilter(tag.id)}>{tag.name}</div>
 						})
 					}
 				</div>
@@ -77,7 +77,6 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				{
 					posts && posts.map((post) => {
 						if(post.tags.indexOf(currentTag)){
-							console.log(post)
 							var picture = post._embedded["wp:featuredmedia"][0].source_url
 							return 	<div className="recipe-card">
 										<div className="title">{post.title.rendered}</div>
@@ -93,34 +92,26 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		);
 	},
 	save: ( props ) => {
-		const {posts, tags, currentTag} = props.attributes;
-		function handleFilter(tag) {
-			props.setAttributes({
-				currentTag: tag
-			})
-		}
+		const {posts, tags } = props.attributes;
+
 		return (
 			<div className={ props.className }>
 				<div className="filters">
 					{
 						tags && tags.map((tag) => {
-							return <div key={tag.id} className="filter" onClick={() => handleFilter(tag.id)}>{tag.name}</div>
+							return <div key={tag.id} className="filter" data-tag={tag.id}>{tag.name}</div>
 						})
 					}
 				</div>
 				<div className="recipe-card-wrapper">
 					{
 						posts && posts.map((post) => {
-							if(post.tags.indexOf(currentTag)){
-								console.log(post)
-								var picture = post._embedded["wp:featuredmedia"][0].source_url
-								return 	<div className="recipe-card">
-											<div className="title">{post.title.rendered}</div>
-											<div className="picture"><img src={picture} /></div>
-											<div className="description">{post.meta.short_description}</div>
-										</div>
-							}
-							return null;
+							var picture = post._embedded["wp:featuredmedia"][0].source_url
+							return 	<div className="recipe-card" data-tags={post.tags.toString()}>
+										<div className="title">{post.title.rendered}</div>
+										<div className="picture"><img src={picture} /></div>
+										<div className="description">{post.meta.short_description}</div>
+									</div>
 						})
 					}
 				</div>
