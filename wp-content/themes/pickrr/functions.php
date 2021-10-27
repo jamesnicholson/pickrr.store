@@ -40,7 +40,7 @@ function wpdocs_kantbtrue_init() {
         'has_archive'        => true,
         'hierarchical'       => false,
         'menu_position'      => 20,
-        'supports'           => array( 'title', 'editor', 'author', 'thumbnail' ),
+        'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'custom-fields' ),
         'taxonomies'         => array( 'category', 'post_tag' ),
         'show_in_rest'       => true
     );
@@ -48,3 +48,15 @@ function wpdocs_kantbtrue_init() {
     register_post_type( 'Recipe', $args );
 }
 add_action( 'init', 'wpdocs_kantbtrue_init' );
+add_action( 'rest_api_init', 'register_experience_meta_fields');
+function register_experience_meta_fields(){
+
+    register_meta( 'post', 'short_description', array(
+        'type' => 'string',
+        'description' => 'event location',
+        'single' => true,
+        'show_in_rest' => true
+    ));
+
+}
+wp_enqueue_script( 'wp-api' );
