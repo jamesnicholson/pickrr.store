@@ -44,18 +44,18 @@
 .recipe-card .picture img{
   width: 100%;
 }
-.filters{
+.filters, .categories{
   display: flex;
   flex-wrap: wrap;
   padding: 25px 25px 10px 25px;
 }
-.filter{
+.filter, .category{
   text-decoration: underline;
   text-transform: capitalize;
   cursor: pointer;
   padding:5px;
 }
-.filter:hover{
+.filter:hover, .category:hover{
   color: #ad8ebd;
 }
 

@@ -1,5 +1,6 @@
 (function($) {
     $(document).ready(function(){
+        console.log(this)
         $('.filter').on('click', function(item) {
             var tag_id = $(this).attr('data-tag');
             $('.recipe-card').each(function(){

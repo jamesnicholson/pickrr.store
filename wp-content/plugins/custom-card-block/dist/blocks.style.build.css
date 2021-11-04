@@ -53,20 +53,20 @@
 .recipe-card .picture img {
   width: 100%; }
 
-.filters {
+.filters, .categories {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   padding: 25px 25px 10px 25px; }
 
-.filter {
+.filter, .category {
   text-decoration: underline;
   text-transform: capitalize;
   cursor: pointer;
   padding: 5px; }
 
-.filter:hover {
+.filter:hover, .category:hover {
   color: #ad8ebd; }
 
 @media only screen and (min-width: 768px) {
