@@ -8,7 +8,7 @@
 //  Import CSS.
 import './editor.scss';
 import './style.scss';
-
+import { useState, useEffect } from '@wordpress/element';
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 
@@ -29,7 +29,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __( 'Custom Card' ), // Block title.
 	icon: 'pets', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
-	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
+	category: 'widgets', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
 		__( 'custom-card-block — CGB Block' ),
 		__( 'CGB Example' ),
@@ -47,18 +47,24 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		}
 	},
 	edit: ( props ) => {
+		console.log("James Edit function")
 		const {posts, tags, currentTag} = props.attributes;
-		posts === undefined && wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts => {
-			props.setAttributes({
-				posts: posts
-			})
-		});	
+		console.log("James",posts)
+		useEffect(() =>{
+			wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts_data => {
+				console.log("James - fetch  posts", posts_data)
+				props.setAttributes({
+					posts: posts_data
+				})
+			});	
+			wp.apiFetch( { path: '/wp/v2/tags' } ).then( posts => {
+				console.log("James - fetch tags",posts)
+				props.setAttributes({
+					tags: posts
+				})
+			});
+		},[])
 
-		tags === undefined  && wp.apiFetch( { path: '/wp/v2/tags' } ).then( posts => {
-			props.setAttributes({
-				tags: posts
-			})
-		});
 		function handleFilter(tag) {
 			props.setAttributes({
 				currentTag: tag
@@ -74,27 +80,28 @@ registerBlockType( 'cgb/block-custom-card-block', {
 					}
 				</div>
 				<div className="recipe-card-wrapper">
-				{
-					posts && posts.map((post) => {
-						if(post.tags.indexOf(currentTag)){
-							var picture = post._embedded["wp:featuredmedia"][0].source_url
-							return 	<div className="recipe-card">
-										<div className="title">{post.title.rendered}</div>
-										<div className="picture"><img src={picture} /></div>
-										<div className="description">{post.meta.short_description}</div>
-										<div className="date">{post.date.substring(0, 10)}</div>
-									</div>
-						}
-						return null;
-					})
-				}
+					<div className="recipe-card-wrapper-inner">
+						{
+						posts && posts.map((post) => {
+							if(post.tags.indexOf(currentTag)){
+								var picture = post._embedded["wp:featuredmedia"][0].source_url
+								return 	<div className="recipe-card">
+											<div className="title">{post.title.rendered}</div>
+											<div className="picture"><img src={picture} /></div>
+											<div className="description">{post.meta.short_description}</div>
+											<div className="date">{post.date.substring(0, 10)}</div>
+										</div>
+							}
+							return null;
+						})
+					}
+					</div>
 				</div>
 			</div>
 		);
 	},
 	save: ( props ) => {
 		const {posts, tags } = props.attributes;
-		
 		return (
 			<div className={ props.className }>
 				<div className="filters">
@@ -105,19 +112,20 @@ registerBlockType( 'cgb/block-custom-card-block', {
 					}
 				</div>
 				<div className="recipe-card-wrapper">
-					{
-						posts && posts.map((post) => {
-							var picture = post._embedded["wp:featuredmedia"][0].source_url
-							return 	<div className="recipe-card" data-tags={post.tags.toString()}>
-										<div className="title">{post.title.rendered}</div>
-										<div className="picture"><img src={picture} /></div>
-										<div className="description">{post.meta.short_description}</div>
-										<div className="date">{post.date.substring(0, 10)}</div>
-									</div>
-						})
-					}
+					<div className="recipe-card-wrapper-inner">
+						{
+							posts && posts.map((post) => {
+								var picture = post._embedded["wp:featuredmedia"][0].source_url
+								return 	<div className="recipe-card" data-tags={post.tags.toString()}>
+											<div className="title">{post.title.rendered}</div>
+											<div className="picture"><img src={picture} /></div>
+											<div className="description">{post.meta.short_description}</div>
+											<div className="date">{post.date.substring(0, 10)}</div>
+										</div>
+							})
+						}
+					</div>
 				</div>
-
 			</div>
 		);
 	}
