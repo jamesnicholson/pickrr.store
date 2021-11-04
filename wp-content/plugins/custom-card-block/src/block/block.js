@@ -55,90 +55,86 @@ registerBlockType( 'cgb/block-custom-card-block', {
 	},
 	edit: ( props ) => {
 		const { posts, tags, currentTag, categories, currentCatgory } = props.attributes;
-		const [filteredTags, setFilteredTags] = useState([]);
-		const [filteredPosts, setFilteredPosts] = useState([]);
 		useEffect(() =>{
 			wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts_data => {
 				props.setAttributes({
 					posts: posts_data
-				})
+				});
 			});	
 			wp.apiFetch( { path: '/wp/v2/tags' } ).then( tags => {
 				props.setAttributes({
 					tags: tags
-				})
+				});
 			});
 			wp.apiFetch( { path: '/wp/v2/categories' } ).then( categories => {
 				props.setAttributes({
 					categories: categories
-				})
+				});
 			});		
 		},[])
-
-		useEffect(() => {
-		/*	if(currentCatgory || currentTag){
-				let filterdCategories = posts.filter((post) => post.categories.indexOf(currentCatgory) !== -1)
-				let filterdPostsWithTags = 	filterdCategories.length !== 0 ? 
-												filterdCategories.filter((post) => post.tags.indexOf(currentTag) !== -1) :
-												posts.filter((post) => post.tags.indexOf(currentTag) !== -1);
-		
-				if(filterdPostsWithTags.length > 0){
-
-					setFilteredPosts(filterdPostsWithTags)
-				}else{
-					setFilteredPosts(filterdCategories)
-				}
-				
-			}else{*/
-				setFilteredPosts(posts)
-			//}
-		},[currentCatgory, currentTag])
 
 		function handleCategory(category) {
 			props.setAttributes({
 				currentCatgory: category
-			})
-			handleClearTags()
-		}
-		function handleClearCategories() {
-			props.setAttributes({
-				currentCatgory: 0
-			})
+			});
+			handleClearTags();
 		}
 		function handleTag(tag) {
 			props.setAttributes({
 				currentTag: tag
-			})
+			});
+			handleClearCategories();
+		}
+		function handleClearCategories() {
+			props.setAttributes({
+				currentCatgory: 0
+			});
 		}
 		function handleClearTags() {
 			props.setAttributes({
 				currentTag: 0
-			})
+			});
+		}
+		function handleBoth() {
+			handleClearCategories();
+			handleClearTags();
+		}
+		function FilterItem({item, type}){
+			
+			return(
+				<div className={type} data-category={item.id} onClick={() => type === "category" ?  handleCategory(item.id) : handleTag(item.id) }>
+					{item.name}
+				</div>
+			);
 		}
 		
 		return (
 			<div className={ props.className }>
-				<div className="categories">
-					<div className="category" onClick={() => handleClearCategories()}>All</div>
-					{
-						categories && categories.map((category) => {
-							return category.slug !== "uncategorized" && category.count !== 0 && <div key={category.id} className="category" data-category={category.id} onClick={() => handleCategory(category.id)}>{category.name}</div>
-						})
-					}
+				<div className="category_wrapper">
+					<h3>Categories</h3>
+					<div className="categories">
+						<div className="category" onClick={() => handleBoth()}>All</div>
+						{
+							categories && categories.map((category) => {
+								return category.slug !== "uncategorized" && category.count !== 0 && <FilterItem key={category.id} item={category} type="category" />
+							})
+						}
+					</div>
 				</div>
-
-				<div className="tags">
-					{
-						tags && tags.map((tag) =>{
-							return tag.count !== 0 && <div key={tag.id} className="tag" data-tag={tag.id} onClick={() => handleTag(tag.id)}>{tag.name}</div>
-						})
-					}
+				<div className="tag_wrapper">
+					<h3>Tags</h3>
+					<div className="tags">
+						{
+							tags && tags.map((tag) =>{
+								return tag.count !== 0 && <FilterItem key={tag.id} item={tag} type="tag" />
+							})
+						}
+					</div>
 				</div>
-
 				<div className="recipe-card-wrapper">
 					<div className="recipe-card-wrapper-inner">
 						{
-							filteredPosts && filteredPosts.map((post) => {
+							posts && posts.map((post) => {
 								const isCategory = post.categories.indexOf(currentCatgory) !== -1 || currentCatgory === 0 || currentCatgory === undefined;
 								const isTag = post.tags.indexOf(currentTag) !== -1 || currentTag === 0 || currentTag === undefined;
 								if(isCategory && isTag){
@@ -163,6 +159,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		return (
 			<div className={ props.className} { ...blockProps }>
 				<div className="category_wrapper">
+					<h3  className='category_header'>Categories</h3>
 					<div className="categories">
 						<div id="clear_categories" className="category filter" data-category={0}>All</div>
 						{
@@ -173,6 +170,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 					</div>
 				</div>
 				<div className="tag_wrapper">
+					<h3 className='tag_header'>Tags</h3>
 					<div className="tags">
 						{
 							tags && tags.map((tag) => {
