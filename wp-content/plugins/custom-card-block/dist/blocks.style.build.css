@@ -87,12 +87,24 @@
   background: #ad8ebd;
   color: white; }
 
+.rotate {
+  -webkit-transition: all .5s linear;
+  -o-transition: all .5s linear;
+  transition: all .5s linear; }
+
+.down .rotate {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+      transform: rotate(90deg); }
+
 @media only screen and (min-width: 768px) {
   .recipe-card {
     max-width: 23%; }
   .recipe-card-wrapper {
     padding: 10px 25px;
-    margin: 10px; } }
+    margin: 10px; }
+  .dashicons {
+    display: none; } }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
   .recipe-card {
@@ -109,7 +121,11 @@
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap; }
   .tags {
-    display: none; } }
+    display: none; }
+  .dashicons {
+    display: block;
+    float: right;
+    margin-top: 10px; } }
 
 @media only screen and (max-width: 480px) {
   .recipe-card {

@@ -2,9 +2,11 @@
     $(document).ready(function(){
         $('.category_header').on('click', function(item) {
             $('.categories').toggle();
+            $(this).toggleClass("down")
         });
         $('.tag_header').on('click', function(item) {
             $('.tags').toggle();
+            $(this).toggleClass("down");
         });
         $('.filter').on('click', function(item) {
             var category_id = $(this).attr('data-category');

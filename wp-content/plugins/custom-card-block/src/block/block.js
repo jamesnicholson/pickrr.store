@@ -75,45 +75,38 @@ registerBlockType( 'cgb/block-custom-card-block', {
 
 		function handleCategory(category) {
 			props.setAttributes({
-				currentCatgory: category
+				currentCatgory: category,
+				currentTag: undefined
 			});
-			handleClearTags();
 		}
 		function handleTag(tag) {
 			props.setAttributes({
+				currentCatgory: undefined,
 				currentTag: tag
 			});
-			handleClearCategories();
+	
 		}
-		function handleClearCategories() {
+		function handleAll() {
 			props.setAttributes({
-				currentCatgory: 0
+				currentCatgory: 0,
+				currentTag: undefined
 			});
-		}
-		function handleClearTags() {
-			props.setAttributes({
-				currentTag: 0
-			});
-		}
-		function handleBoth() {
-			handleClearCategories();
-			handleClearTags();
 		}
 		function FilterItem({item, type}){
-			
+			const isCurrent = (type === "category") ? (currentCatgory === item.id ? " selected" : "") : (currentTag === item.id ?  " selected" : "");
 			return(
-				<div className={type} data-category={item.id} onClick={() => type === "category" ?  handleCategory(item.id) : handleTag(item.id) }>
+				<div className={type + isCurrent} data-category={item.id} onClick={() => type === "category" ?  handleCategory(item.id) : handleTag(item.id) }>
 					{item.name}
 				</div>
 			);
 		}
-		
+		console.log(currentCatgory)
 		return (
 			<div className={ props.className }>
 				<div className="category_wrapper">
 					<h3>Categories</h3>
 					<div className="categories">
-						<div className="category" onClick={() => handleBoth()}>All</div>
+						<div className={"category" + (currentCatgory === 0 ? " selected" : "")} data-category={0} onClick={() => handleAll()}>All</div>
 						{
 							categories && categories.map((category) => {
 								return category.slug !== "uncategorized" && category.count !== 0 && <FilterItem key={category.id} item={category} type="category" />
@@ -170,7 +163,10 @@ registerBlockType( 'cgb/block-custom-card-block', {
 					</div>
 				</div>
 				<div className="tag_wrapper">
-					<h3 className='tag_header'>Tags</h3>
+					<h3 className='tag_header'>
+						Tags
+						<span class="dashicons dashicons-arrow-down-alt2 rotate"></span>
+					</h3>
 					<div className="tags">
 						{
 							tags && tags.map((tag) => {
