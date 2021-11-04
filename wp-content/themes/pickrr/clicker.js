@@ -1,21 +1,27 @@
 (function($) {
     $(document).ready(function(){
-        console.log(this)
+    
         $('.filter').on('click', function(item) {
+            var category_id = $(this).attr('data-category');
             var tag_id = $(this).attr('data-tag');
-            $('.recipe-card').each(function(){
-                var stuff = $(this).attr('data-tags').split(',');
-                if(stuff.includes(tag_id)){
-                    $(this).show();
-                }
-                else{
-                    $(this).hide();
-                }
+
+            $('.filter').each(function(){
+                $(this).removeClass('selected');
             })
-        });
-        $('#filter-tag-all').on('click', function() {
+            $(this).addClass('selected');
+           
             $('.recipe-card').each(function(){
-                $(this).show();
+                var dataTags = $(this).attr('data-tags').split(',');
+                var dataCategories = $(this).attr('data-categories').split(',');
+                if(category_id != 0){
+                    if(dataCategories.includes(category_id) || dataTags.includes(tag_id)){
+                        $(this).show();         
+                    }else{
+                        $(this).hide();
+                    }
+                }else{
+                    $(this).show();      
+                }
             })
         });
     });

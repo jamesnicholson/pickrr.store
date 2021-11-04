@@ -127,11 +127,10 @@ registerBlockType( 'cgb/block-custom-card-block', {
 					}
 				</div>
 
-				<div className="filters">
-					<div className="filter" onClick={() => handleClearTags()}>All</div>
+				<div className="tags">
 					{
 						tags && tags.map((tag) =>{
-							return tag.count !== 0 && <div key={tag.id} className="filter" data-tag={tag.id} onClick={() => handleTag(tag.id)}>{tag.name}</div>
+							return tag.count !== 0 && <div key={tag.id} className="tag" data-tag={tag.id} onClick={() => handleTag(tag.id)}>{tag.name}</div>
 						})
 					}
 				</div>
@@ -163,27 +162,30 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		const blockProps = useBlockProps.save();
 		return (
 			<div className={ props.className} { ...blockProps }>
-				<div className="categories">
-					<div className="category">All</div>
-					{
-						categories && categories.map((category) => {
-							return category.slug !== "uncategorized" && category.count !== 0 && <div key={category.id} className="category" data-category={category.id}>{category.name}</div>
-						})
-					}
+				<div className="category_wrapper">
+					<div className="categories">
+						<div id="clear_categories" className="category filter" data-category={0}>All</div>
+						{
+							categories && categories.map((category) => {
+								return category.slug !== "uncategorized" && category.count !== 0 && <div key={category.id} className="category filter" data-category={category.id}>{category.name}</div>
+							})
+						}
+					</div>
 				</div>
-				<div className="filters">
-					<div id="filter-tag-all" className="filter">All</div>
-					{
-						tags && tags.map((tag) => {
-							return tag.count !== 0 && <div key={tag.id} className="filter" data-tag={tag.id}>{tag.name}</div>
-						})
-					}
+				<div className="tag_wrapper">
+					<div className="tags">
+						{
+							tags && tags.map((tag) => {
+								return tag.count !== 0 && <div key={tag.id} className="tag filter" data-tag={tag.id}>{tag.name}</div>
+							})
+						}
+					</div>
 				</div>
 				<div className="recipe-card-wrapper">
 					<div className="recipe-card-wrapper-inner">
 						{
 							posts && posts.map((post) => {
-								var picture = post._embedded["wp:featuredmedia"][0].source_url
+								var picture = post._embedded["wp:featuredmedia"][0].source_url;
 								return 	<a href="#" className="recipe-card" data-tags={post.tags.toString()} data-categories={post.categories.toString()}>
 											<div className="title">{post.title.rendered}</div>
 											<div className="picture"><img src={picture} /></div>
