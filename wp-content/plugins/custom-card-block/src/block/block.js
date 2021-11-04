@@ -55,6 +55,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 	},
 	edit: ( props ) => {
 		const { posts, tags, currentTag, categories, currentCatgory } = props.attributes;
+		console.log(posts)
 		useEffect(() =>{
 			wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts_data => {
 				props.setAttributes({
@@ -180,7 +181,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 						{
 							posts && posts.map((post) => {
 								var picture = post._embedded["wp:featuredmedia"][0].source_url;
-								return 	<a href="#" className="recipe-card" data-tags={post.tags.toString()} data-categories={post.categories.toString()}>
+								return 	<a href={post.link} className="recipe-card" data-tags={post.tags.toString()} data-categories={post.categories.toString()}>
 											<div className="title">{post.title.rendered}</div>
 											<div className="picture"><img src={picture} /></div>
 											<div className="description">{post.meta.short_description}</div>

@@ -42,8 +42,13 @@
   line-height: 14px;
   padding: 10px 0;
 }
+.recipe-card .picture {
+  max-height: 250px;
+  overflow: hidden;
+}
 .recipe-card .picture img{
   width: 100%;
+  min-width: 450px;
 }
 .category_wrapper{
   background: #fff;
