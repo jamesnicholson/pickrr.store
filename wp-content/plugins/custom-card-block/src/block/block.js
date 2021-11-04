@@ -47,9 +47,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		}
 	},
 	edit: ( props ) => {
-		console.log("James Edit function")
 		const {posts, tags, currentTag} = props.attributes;
-		console.log("James",posts)
 		useEffect(() =>{
 			wp.apiFetch( { path: '/wp/v2/recipe?_embed' } ).then( posts_data => {
 				console.log("James - fetch  posts", posts_data)
@@ -66,35 +64,42 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		},[])
 
 		function handleFilter(tag) {
+			console.log(tag);
 			props.setAttributes({
 				currentTag: tag
+			})
+		}
+		function handleClearFilter() {
+			props.setAttributes({
+				currentTag: 0
 			})
 		}
 		return (
 			<div className={ props.className }>
 				<div className="filters">
+					<div className="filter" onClick={() => handleClearFilter()}>All</div>
 					{
 						tags && tags.map((tag) =>{
-							return <div key={tag.id} className="filter" data-tag={tag.id} onClick={() => handleFilter(tag.id)}>{tag.name}</div>
+							return tag.count !== 0 && <div key={tag.id} className="filter" data-tag={tag.id} onClick={() => handleFilter(tag.id)}>{tag.name}</div>
 						})
 					}
 				</div>
 				<div className="recipe-card-wrapper">
 					<div className="recipe-card-wrapper-inner">
 						{
-						posts && posts.map((post) => {
-							if(post.tags.indexOf(currentTag)){
-								var picture = post._embedded["wp:featuredmedia"][0].source_url
-								return 	<div className="recipe-card">
-											<div className="title">{post.title.rendered}</div>
-											<div className="picture"><img src={picture} /></div>
-											<div className="description">{post.meta.short_description}</div>
-											<div className="date">{post.date.substring(0, 10)}</div>
-										</div>
-							}
-							return null;
-						})
-					}
+							posts && posts.map((post) => {
+								if(post.tags.indexOf(currentTag) !== -1 || currentTag === 0 || currentTag === undefined){
+									var picture = post._embedded["wp:featuredmedia"][0].source_url
+									return 	<div className="recipe-card">
+												<div className="title">{post.title.rendered}</div>
+												<div className="picture"><img src={picture} /></div>
+												<div className="description">{post.meta.short_description}</div>
+												<div className="date">{post.date.substring(0, 10)}</div>
+											</div>
+								}
+								return null;
+							})
+						}
 					</div>
 				</div>
 			</div>
@@ -105,9 +110,10 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		return (
 			<div className={ props.className }>
 				<div className="filters">
+					<div id="filter-tag-all" className="filter">All</div>
 					{
 						tags && tags.map((tag) => {
-							return <div key={tag.id} className="filter" data-tag={tag.id}>{tag.name}</div>
+							return tag.count !== 0 && <div key={tag.id} className="filter" data-tag={tag.id}>{tag.name}</div>
 						})
 					}
 				</div>

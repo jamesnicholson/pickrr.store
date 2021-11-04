@@ -12,5 +12,10 @@
                 }
             })
         });
+        $('#filter-tag-all').on('click', function() {
+            $('.recipe-card').each(function(){
+                $(this).show();
+            })
+        });
     });
 })(jQuery);

@@ -15,7 +15,6 @@
   -ms-flex-direction: column;
       flex-direction: column;
   background: #832b0a1c;
-  border: 0.01rem solid #292929;
   color: #292929;
   margin: 0 auto; }
 
@@ -56,10 +55,14 @@
 
 .filters {
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding: 25px 25px 10px 25px; }
 
 .filter {
   text-decoration: underline;
+  text-transform: capitalize;
   cursor: pointer;
   padding: 5px; }
 
@@ -68,7 +71,9 @@
 
 @media only screen and (min-width: 768px) {
   .recipe-card {
-    max-width: 23%; } }
+    max-width: 23%; }
+  .recipe-card-wrapper {
+    padding: 10px 25px; } }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
   .recipe-card {
