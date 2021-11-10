@@ -101,7 +101,6 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				</div>
 			);
 		}
-		console.log(currentCatgory)
 		return (
 			<div className={ props.className }>
 				<div className="category_wrapper">
@@ -153,7 +152,10 @@ registerBlockType( 'cgb/block-custom-card-block', {
 		return (
 			<div className={ props.className} { ...blockProps }>
 				<div className="category_wrapper">
-					<h3  className='category_header'>Categories</h3>
+					<h3  className='category_header'>
+						Categories
+						<span class="dashicons dashicons-arrow-down-alt2 rotate"></span>
+					</h3>
 					<div className="categories">
 						<div id="clear_categories" className="category filter" data-category={0}>All</div>
 						{
