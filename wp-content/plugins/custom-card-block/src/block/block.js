@@ -154,7 +154,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				<div className="category_wrapper">
 					<h3  className='category_header'>
 						Categories
-						<span class="dashicons dashicons-arrow-down-alt2 rotate"></span>
+						<span class="dashicons dashicons-arrow-right-alt2 rotate"></span>
 					</h3>
 					<div className="categories">
 						<div id="clear_categories" className="category filter" data-category={0}>All</div>
@@ -168,7 +168,7 @@ registerBlockType( 'cgb/block-custom-card-block', {
 				<div className="tag_wrapper">
 					<h3 className='tag_header'>
 						Tags
-						<span class="dashicons dashicons-arrow-down-alt2 rotate"></span>
+						<span class="dashicons dashicons-arrow-right-alt2 rotate"></span>
 					</h3>
 					<div className="tags">
 						{
